@@ -1,2 +1,2 @@
-# CI-CD-pipeline
+# CI-CD pipeline
 Building a pipeline
