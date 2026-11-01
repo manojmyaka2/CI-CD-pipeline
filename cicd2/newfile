@@ -1,6 +1,81 @@
 pipeline {
     agent any
 
+    stages {
+
+        stage('Git Checkout') {
+            steps {
+                echo 'Downloading source code from GitHub'
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing Node.js dependencies'
+                sh 'npm install'
+            }
+        }
+
+        stage('Code Linting') {
+            steps {
+                echo 'Checking code quality'
+                sh 'npm run lint'
+            }
+        }
+
+        stage('Unit Testing') {
+            steps {
+                echo 'Running unit tests'
+                sh 'npm test'
+            }
+        }
+
+        stage('Build Application') {
+            steps {
+                echo 'Building Node.js application'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                echo 'Building Docker image'
+                sh 'docker build -t my-node-app:latest .'
+            }
+        }
+
+        stage('Docker Image Verification') {
+            steps {
+                echo 'Checking Docker image'
+                sh 'docker images my-node-app:latest'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application'
+                sh 'echo Application deployment goes here'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed. Check the console logs.'
+        }
+
+        always {
+            echo 'Pipeline execution finished.'
+        }
+    }
+}pipeline {
+    agent any
+
     tools {
         jdk 'Java21'
         maven 'Maven3'
